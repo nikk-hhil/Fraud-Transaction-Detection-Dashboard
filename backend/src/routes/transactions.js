@@ -28,7 +28,15 @@ router.post('/analyze', async (req, res) => {
     
     // Emit to WebSocket if fraud detected
     if (mlResponse.data.is_fraud) {
-      req.app.get('io').emit('fraud-alert', transaction);
+      try {
+        if (req.app.get('io')) {
+          req.app.get('io').emit('fraud-alert', transaction);
+        } else {
+          console.log('WebSocket not available, skipping notification');
+        }
+      } catch (error) {
+        console.log('Error sending WebSocket notification:', error);
+      }
     }
     
     res.json(transaction);

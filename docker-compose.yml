@@ -1,20 +1,17 @@
 version: '3.8'
 
 services:
-  frontend:
+  ml-service:
     build:
-      context: ./frontend
+      context: ./ml-service
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:3001
-      - NEXT_PUBLIC_WS_URL=ws://localhost:3001
-    depends_on:
-      - backend
+      - "8000:8000"
+    networks:
+      - fraud-detection-network
     volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - ./ml-service:/app
+      - ./data:/app/data
 
   backend:
     build:
@@ -22,44 +19,48 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3001:3001"
-    environment:
-      - MONGODB_URI=mongodb://mongodb:27017/fraud_detection
-      - POSTGRES_URI=postgresql://postgres:postgres@postgres:5432/fraud_detection
-      - JWT_SECRET=your_jwt_secret
-      - FRONTEND_URL=http://localhost:3000
     depends_on:
       - mongodb
-      - postgres
       - ml-service
+    networks:
+      - fraud-detection-network
+    volumes:
+      - ./backend:/app
+    environment:
+      - PORT=3001
+      - MONGODB_URI=mongodb://mongodb:27017/fraud_detection
+      - ML_SERVICE_URL=http://ml-service:8000
+      - FRONTEND_URL=http://localhost:3000
+      - NODE_ENV=development
 
-  ml-service:
+  frontend:
     build:
-      context: ./ml-service
+      context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "8000:8000"
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - fraud-detection-network
     volumes:
-      - ./ml-service:/app
-      - ./ml-service/models:/app/models
+      - ./frontend:/app
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3001/api
+      - NEXT_PUBLIC_WS_URL=http://localhost:3001
 
   mongodb:
     image: mongo:latest
     ports:
       - "27017:27017"
+    networks:
+      - fraud-detection-network
     volumes:
-      - mongodb_data:/data/db
+      - mongodb-data:/data/db
 
-  postgres:
-    image: postgres:latest
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=fraud_detection
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+networks:
+  fraud-detection-network:
+    driver: bridge
 
 volumes:
-  mongodb_data:
-  postgres_data: 
+  mongodb-data:

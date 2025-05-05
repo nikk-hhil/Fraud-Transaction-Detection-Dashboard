@@ -1,7 +1,6 @@
-import DashboardStats from '@/components/dashboard/DashboardStats'
+import DashboardStats from '@/components/dashboard/DashboardStats';
 import RecentTransactions from '@/components/dashboard/RecentTransactions'
 import FraudTrendChart from '@/components/dashboard/FraudTrendChart'
-
 export default function Home() {
   return (
     <div className="space-y-6">
