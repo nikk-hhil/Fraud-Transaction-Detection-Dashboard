@@ -138,10 +138,13 @@ export default function FraudTrendChart() {
     );
   };
 
-  return (
-    <div className="card p-4">
+ return (
+  <div className="card h-full flex flex-col">
+    <div className="px-5 py-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 border-b border-gray-200 dark:border-gray-700">
+      <h3 className="text-lg font-medium text-gray-900 dark:text-white">Fraud Trends</h3>
+    </div>
+    <div className="p-5 flex-grow">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white">Fraud Trends</h3>
         <div className="flex space-x-2">
           <button 
             onClick={() => setChartType('line')}
@@ -165,11 +168,12 @@ export default function FraudTrendChart() {
           </button>
         </div>
       </div>
-      <div style={{ width: '100%', height: 300 }}>
+      <div className="h-[300px]">
         <ResponsiveContainer>
           {renderChart()}
         </ResponsiveContainer>
       </div>
     </div>
-  );
+  </div>
+);
 }

@@ -49,60 +49,60 @@ export default function RecentTransactions() {
   }
 
   return (
-    <div className="card">
-      <div className="px-5 py-4 flex justify-between items-center bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-purple-600 dark:text-purple-400" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-          </svg>
-          Recent Transactions
-        </h3>
-        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Last 24 hours</span>
-      </div>
-      <div className="border-t border-gray-200 dark:border-gray-700">
-        <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-          {transactions.map((transaction) => (
-            <li key={transaction._id} className="px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150">
-              <div className="flex items-center justify-between">
-                <div className="flex items-start space-x-4">
-                  <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
-                    getColorForCategory(transaction.category)
-                  }`}>
-                    {getCategoryIcon(transaction.category)}
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
-                      {transaction.merchant}
-                    </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      ${transaction.amt.toFixed(2)} - {formatCategory(transaction.category)}
-                    </p>
-                    {transaction.timestamp && (
-                      <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                        {new Date(transaction.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <div className={`px-3 py-1.5 rounded-full text-xs font-medium ${
-                  transaction.isFraud 
-                    ? 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300 border border-red-200 dark:border-red-800' 
-                    : 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300 border border-green-200 dark:border-green-800'
+  <div className="card h-full flex flex-col">
+    <div className="px-5 py-4 flex justify-between items-center bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20">
+      <h3 className="text-lg font-medium text-gray-900 dark:text-white flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-purple-600 dark:text-purple-400" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+        </svg>
+        Recent Transactions
+      </h3>
+      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Last 24 hours</span>
+    </div>
+    <div className="border-t border-gray-200 dark:border-gray-700 flex-grow overflow-y-auto">
+      <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+        {transactions.map((transaction) => (
+          <li key={transaction._id} className="px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150">
+            <div className="flex items-center justify-between">
+              <div className="flex items-start space-x-4">
+                <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
+                  getColorForCategory(transaction.category)
                 }`}>
-                  {transaction.isFraud ? 'Fraud' : 'Legitimate'}
+                  {getCategoryIcon(transaction.category)}
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    {transaction.merchant}
+                  </p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    ${transaction.amt.toFixed(2)} - {formatCategory(transaction.category)}
+                  </p>
+                  {transaction.timestamp && (
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                      {new Date(transaction.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                    </p>
+                  )}
                 </div>
               </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="px-5 py-3 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-        <a href="/transactions" className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300">
-          View all transactions →
-        </a>
-      </div>
+              <div className={`px-3 py-1.5 rounded-full text-xs font-medium ${
+                transaction.isFraud 
+                  ? 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300 border border-red-200 dark:border-red-800' 
+                  : 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300 border border-green-200 dark:border-green-800'
+              }`}>
+                {transaction.isFraud ? 'Fraud' : 'Legitimate'}
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
-  );
+    <div className="px-5 py-3 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+      <a href="/transactions" className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300">
+        View all transactions →
+      </a>
+    </div>
+  </div>
+);
 }
 
 function getColorForCategory(category: string): string {

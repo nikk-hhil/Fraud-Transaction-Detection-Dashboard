@@ -129,4 +129,12 @@ body {
   .skeleton {
     @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
   }
+
+  .dashboard-card {
+    @apply h-full flex flex-col;
+  }
+  
+  .dashboard-card-body {
+    @apply flex-grow overflow-auto;
+  }
 }
