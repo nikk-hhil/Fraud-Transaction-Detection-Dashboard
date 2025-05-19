@@ -34,10 +34,22 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // Middleware
+const allowedOrigins = [
+  'https://fraud-transaction-detection-dashbaord.vercel.app',
+  'https://fraud-transaction-detection-dash-git-ab0c19-nikk-hhils-projects.vercel.app',
+  'http://localhost:3000'
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  methods: ['GET', 'POST'],
-  credentials: true
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS: ' + origin));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST']
 }));
 
 app.use(express.json());
