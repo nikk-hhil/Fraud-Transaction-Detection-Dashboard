@@ -1,6 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from xgboost import XGBClassifier
+from catboost import CatBoostClassifier
 import numpy as np
 import pandas as pd
 import joblib
@@ -29,8 +31,11 @@ app.add_middleware(
 
 # Load models and preprocessors
 try:
-    xgboost_model = joblib.load('models/xgboost_model.joblib')
-    catboost_model = joblib.load('models/catboost_model.joblib')
+    xgboost_model = XGBClassifier()
+    xgboost_model.load_model('models/xgboost_model.json')
+
+    catboost_model = CatBoostClassifier()
+    catboost_model.load_model('models/catboost_model.cbm')
     scaler = joblib.load('models/scaler.joblib')
     feature_names = joblib.load('models/feature_names.joblib')
     logger.info("Models loaded successfully")
