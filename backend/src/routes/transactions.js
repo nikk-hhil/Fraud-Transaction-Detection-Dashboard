@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
+require('dotenv').config();
 
 // You'll need to create this model
 const Transaction = require('../models/Transaction');
@@ -9,7 +10,8 @@ const Transaction = require('../models/Transaction');
 router.post('/analyze', async (req, res) => {
   try {
     // Call ML service
-    const mlResponse = await axios.post('http://localhost:8000/predict', req.body);
+    const mlResponse = await axios.post(`${process.env.ML_SERVICE_URL}/predict`, req.body);
+
     
     // Create transaction record
     const transaction = new Transaction({
