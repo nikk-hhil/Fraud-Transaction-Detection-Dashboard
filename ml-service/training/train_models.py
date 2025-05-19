@@ -226,8 +226,9 @@ def main():
         )
         
         # Save models
-        joblib.dump(xgb_model, MODELS_DIR / 'xgboost_model.joblib')
-        joblib.dump(cat_model, MODELS_DIR / 'catboost_model.joblib')
+        xgb_model.save_model(str(MODELS_DIR / 'xgboost_model.json'))
+        cat_model.save_model(str(MODELS_DIR / 'catboost_model.cbm'))
+
         
         # Evaluate models
         xgb_score = xgb_model.score(X_test_scaled, y_test)
