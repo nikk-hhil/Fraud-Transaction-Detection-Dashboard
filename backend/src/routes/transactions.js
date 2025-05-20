@@ -10,9 +10,16 @@ const Transaction = require('../models/Transaction');
 router.post('/analyze', async (req, res) => {
   try {
     // Call ML service
-    const mlResponse = await axios.post(`${process.env.ML_SERVICE_URL}/predict`, req.body);
+    console.log("Calling ML service with data:", req.body);
+    console.log("ML service URL:", `${process.env.ML_SERVICE_URL}/predict`);
+    let mlResponse;
+    try {
+      mlResponse = await axios.post(`${process.env.ML_SERVICE_URL}/predict`, req.body);
+    } catch (mlError) {
+      console.error("ML service responded with error:", mlError?.response?.data || mlError.message);
+      return res.status(500).json({ error: 'Failed to call ML service' });
+    }
 
-    
     // Create transaction record
     const transaction = new Transaction({
       ...req.body,
